@@ -69,7 +69,7 @@
     </el-table>
     <!--提现-->
     <el-dialog title='提现' :visible.sync='takeMoneyModal' :close-on-click-modal='false'>
-      <el-form :model='takeMoneyForm' ref='takeMoneyForm' class="form-item" :rules='rechargeRules'
+      <el-form :model='takeMoneyForm' ref='takeMoneyForm' class="form-item"
         label-width="80px">
         <el-form-item label='提现金额'>
           <el-input v-model='takeMoneyForm.money'></el-input>
