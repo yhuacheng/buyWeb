@@ -8,50 +8,63 @@
           <el-tab-pane label="登录" name="first">
           </el-tab-pane>
           <el-tab-pane label="找回密码" name="second">
-            <div class="demo-ruleForm">
+            <div class="demo-ruleForm" v-show="active==1||active==2">
               <el-button type="info" :class="active === 1?'activeThis':''" size='small' @click="useEmail">通过邮箱找回</el-button>
-              <el-button type="success" size='small' :class="active === 2?'activeThis':''" @click='usePhone'>通过手机找回</el-button>
+              <el-button type="success" :class="active === 2?'activeThis':''" size='small' @click='usePhone'>通过手机找回</el-button>
             </div>
             <el-form :model="forgetEmail" ref="forgetEmail" :rules='rules' class='demo-ruleForm loginItem' status-icon
-              v-show='useType'>
+              v-show='active === 1'>
               <el-form-item>
                 <el-input placeholder="请输入邮箱" v-model="forgetEmail.email">
                 </el-input>
               </el-form-item>
-              <el-form-item>
-                <el-input v-model="forgetEmail.imgCode" placeholder='图形验证码'>
+              <el-form-item prop="verification">
+                <el-input v-model="forgetEmail.verification" placeholder='图形验证码'>
                 </el-input>
               </el-form-item>
               <el-form-item>
-                <img :src="codeImg" alt="" class="avatar">
-                <el-button type='text' class="textbtn">看不清，换一张</el-button>
+                <img :src="codeImg" alt="" class="avatar" style="display:inline">
+                <el-button type='text' class="textbtn" @click="getImgCode">看不清，换一张</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button type='primary' class="login-big-btn">找回密码</el-button>
+                <el-button type='primary' class="login-big-btn" @click="getBackPasswordByEmail(forgetEmail)">找回密码</el-button>
               </el-form-item>
             </el-form>
-            <el-form :model="forgetPhone" ref="forgetPhone" :rules='rules' class='demo-ruleForm loginItem' status-icon v-show='!useType'>
-              <el-form-item>
-                <el-input placeholder="请输入手机号" v-model="forgetPhone.phone">
+            <el-form :model="forgetPhone" ref="forgetPhone" :rules='rules' class='demo-ruleForm loginItem' status-icon
+              v-show='active === 2'>
+              <el-form-item prop="PhoneNumber">
+                <el-input placeholder="请输入手机号" v-model="forgetPhone.PhoneNumber">
                 </el-input>
               </el-form-item>
-              <el-form-item>
-                <el-input v-model="forgetPhone.imgCode" placeholder='图形验证码'>
-                </el-input>
-              </el-form-item>
-              <el-form-item>
-                <img :src="codeImg" alt="" class="avatar">
-                <el-button type='text' class="textbtn">看不清，换一张</el-button>
-              </el-form-item>
-              <el-form-item>
-                <el-input class="reg-checknum" v-model="forgetPhone.VerificationCode" placeholder='请输入验证码'></el-input>
-                <el-button class="reg-checkbtn" type="primary" size="medium" @click='getPhoneCode' :disabled="codedisabled">
+              <el-form-item prop="verification2">
+                <el-input class="reg-checknum" v-model="forgetPhone.verification2" placeholder='请输入验证码' prop="verification2"></el-input>
+                <el-button class="reg-checkbtn" type="primary" size="medium" @click='getPhoneCheckNumRes' :disabled="codedisabled">
                   <span v-show="show">获取验证码</span>
                   <span v-show='!show'>{{count}}秒</span>
                 </el-button>
               </el-form-item>
+              <el-form-item prop="verification">
+                <el-input v-model="forgetPhone.verification" placeholder='图形验证码'>
+                </el-input>
+              </el-form-item>
               <el-form-item>
-                <el-button type='primary' class="login-big-btn mt20">找回密码</el-button>
+                <img :src="codeImg" alt="" class="avatar" style="display:inline">
+                <el-button type='text' class="textbtn" @click="getImgCode">看不清，换一张</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button type='primary' class="login-big-btn mt20" @click="getBackPasswordByPhone('forgetPhone')">找回密码</el-button>
+              </el-form-item>
+            </el-form>
+            <el-form :model="restPassword" ref="restPassword" :rules='rules' class='demo-ruleForm loginItem'
+              status-icon v-show='active === 3'>
+              <el-form-item prop="passwords2">
+                <el-input v-model="restPassword.passwords2" type='password' placeholder='请输入新密码 (6-16位字符)'></el-input>
+              </el-form-item>
+              <el-form-item prop="confirmPassWord2">
+                <el-input v-model="restPassword.confirmPassWord2" type='password' placeholder='请确认密码'></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type='primary' class="login-big-btn mt20" @click="submitEditPassword('restPassword')">确定</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -67,16 +80,16 @@
                 <el-input v-model="formLogin.passwords" placeholder='请输入密码'>
                 </el-input>
               </el-form-item>
-              <el-form-item>
-                <el-input v-model="formLogin.verification2" placeholder='图形验证码'>
+              <el-form-item prop="verification">
+                <el-input v-model="formLogin.verification" placeholder='图形验证码'>
                 </el-input>
               </el-form-item>
               <el-form-item>
-                <img :src="codeImg" alt="" class="avatar">
-                <el-button type='text' class="textbtn">看不清，换一张</el-button>
+                <img :src="codeImg" alt="" class="avatar" style="display:inline">
+                <el-button type='text' class="textbtn" @click="getImgCode">看不清，换一张</el-button>
               </el-form-item>
               <el-form-item>
-                <el-checkbox v-model="formLogin.checked">保持登录状态</el-checkbox>
+                <!-- <el-checkbox v-model="formLogin.checked">保持登录状态</el-checkbox> -->
                 <span class="forgetTxt" @click="forgetPwd">忘记密码？</span>
               </el-form-item>
               <el-form-item>
@@ -89,9 +102,9 @@
               <el-form-item prop="PhoneNumber">
                 <el-input v-model="formReg.PhoneNumber" placeholder='请输入手机号'></el-input>
               </el-form-item>
-              <el-form-item>
-                <el-input class="reg-checknum" v-model="formReg.mobileVerification" placeholder='请输入验证码'></el-input>
-                <el-button class="reg-checkbtn" type="primary" size="medium" @click='getPhoneCode' :disabled="codedisabled">
+              <el-form-item prop="verification2">
+                <el-input class="reg-checknum" v-model="formReg.verification2" placeholder='请输入验证码'></el-input>
+                <el-button class="reg-checkbtn" type="primary" size="medium" @click='PhoneCodeModalShow' :disabled="codedisabled">
                   <span v-show="show">获取验证码</span>
                   <span v-show='!show'>{{count}}秒</span>
                 </el-button>
@@ -100,7 +113,8 @@
                 <el-input v-model="formReg.name" placeholder='请输入昵称'></el-input>
               </el-form-item>
               <el-form-item prop="passwords">
-                <el-input v-model="formReg.passwords" type='password' placeholder='请输入密码 (6-16位字符)'></el-input>
+                <el-input v-model="formReg.passwords" type='password' placeholder='请输入密码 (6-16位字符)' minlength='6'
+                  maxlength='16'></el-input>
               </el-form-item>
               <el-form-item prop="confirmPassWord">
                 <el-input v-model="formReg.confirmPassWord" type='password' placeholder='请确认密码'></el-input>
@@ -110,17 +124,36 @@
               </el-form-item>
               <el-form-item>
                 <el-checkbox-group v-model="formReg.agreeService">
-                  <el-checkbox label="我已阅读并同意<xxx>服务条款" class='col9' name="type"></el-checkbox>
+                  <el-checkbox label="我已阅读并同意<xxx>服务条款" class='col9' name="type" @change="agree"></el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitRegister" class="login-big-btn">立即注册</el-button>
+                <el-button type="primary" @click="submitRegister('formReg')" class="login-big-btn" :disabled="regdisabled">立即注册</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
         </el-tabs>
       </div>
     </div>
+
+    <!-- 获取手机验证码弹框 -->
+    <el-dialog title='验证码' :visible.sync='PhoneCodeModal' :close-on-click-modal="false" width="30%">
+      <el-form :model="formReg" ref="formReg" :rules="rules" class="demo-ruleForm loginItem" status-icon>
+        <el-form-item prop="verification">
+          <el-input v-model="formReg.verification" placeholder='请输入图形码'></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="identifybox" style="margin-top:20px">
+        <img :src="codeImg" alt="" class="avatar" style="display:inline">
+        <el-button @click="getImgCode" type='text' class="textbtn">看不清，换一张</el-button>
+      </div>
+      <div slot='footer' class="dialog-footer">
+        <el-button type='primary' @click="getPhoneCheckNum">确定</el-button>
+        <el-button @click='PhoneCodeModal=false'>取消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 网站首页 -->
     <div class="index" v-show='indexShow'>
       <a name='index'></a>
       <div class="banner">
@@ -128,20 +161,15 @@
           <div class="navHeads">
             <div class="navImg login">
               <div class="imgBox">
-                <img src="../../assets/image/logo.png" class="img-log" />
+                <!-- <img src="../../assets/image/logo.png" class="img-log" /> -->
+                <i class="el-icon-upload logo-icon"></i> <span class="logo-text">HotBuy</span>
               </div>
             </div>
             <div class="navRightBox loginRi">
               <ul class="navBox">
-                <li>
-                  <a href="#index">首页</a>
-                </li>
-                <li>
-                  <a href="#Solution">产品服务</a>
-                </li>
-                <li>
-                  <a href="#about">关于我们</a>
-                </li>
+                <li><a href="#index">首页</a></li>
+                <li><a href="#Solution">产品服务</a></li>
+                <li><a href="#about">关于我们</a></li>
                 <li>
                   <a class="loginBtn" @click="loginBtn">登录</a><span class="col-fff">|</span>
                   <a class="registerBtn" @click="register">注册</a>
@@ -151,8 +179,8 @@
           </div>
         </div>
         <div class="bannerTxt">
-          <p class="col p1">Amzbuy</p>
-          <p class="col p2">用Amzbuy，提升亚马逊销量，轻松打造爆款商品</p>
+          <p class="col p1">HotBuy</p>
+          <p class="col p2">用HotBuy，提升亚马逊销量，轻松打造爆款商品</p>
         </div>
       </div>
       <!-- 我们的产品服务 -->
@@ -164,7 +192,7 @@
           <el-row :gutter="50">
             <el-col :span='6' :xs='24' class='txtCenter'>
               <div class="taskBor">
-                <p class="fz20">FBA任务</p>
+                <p class="fz20">FBA购买</p>
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
@@ -177,7 +205,7 @@
             </el-col>
             <el-col :span='6' :xs='24' class='txtCenter'>
               <div class="taskBor">
-                <p class="fz20">加购任务</p>
+                <p class="fz20">加购物车</p>
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
@@ -190,7 +218,7 @@
             </el-col>
             <el-col :span='6' :xs='24' class='txtCenter'>
               <div class="taskBor">
-                <p class="fz20">点赞任务</p>
+                <p class="fz20">产品点赞</p>
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
@@ -203,7 +231,7 @@
             </el-col>
             <el-col :span='6' :xs='24' class='txtCenter'>
               <div class="taskBor">
-                <p class="fz20">QA任务</p>
+                <p class="fz20">自动问答</p>
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
@@ -291,21 +319,6 @@
         <p class="txtCenter footerTxt">Copyright ©2019 By Amzbuy 版权所有</p>
       </footer>
     </div>
-    <el-dialog title='验证码' :visible.sync='codeModal' :close-on-click-modal="false" width="30%">
-      <el-input v-model="formLogin.verification2" placeholder='请输入图形码'>
-
-      </el-input>
-      <div class="identifybox">
-        <div>
-          <img :src="codeImg" alt="" class="avatar" @click="refreshCode">
-        </div>
-        <el-button @click="refreshCode" type='text' class="textbtn">看不清，换一张</el-button>
-      </div>
-      <div slot='footer' class="dialog-footer">
-        <el-button type='primary'>确定</el-button>
-        <el-button @click='codeModal=false'>取消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -313,19 +326,21 @@
   import vali from '../common/validate'
   export default {
     data() {
-      let validatePass = (rule, value, callback) => {
-        const reg = /^[A-Za-z]+[0-9]+[A-Za-z0-9]*|[0-9]+[A-Za-z]+[A-Za-z0-9]*$/
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        } else if (this.formReg.confirmPassWord !== '') {
-          this.$refs.formReg.validateField('confirmPassWord')
-        } else if (reg.test(value) && value.length >= 6) {
+
+      // 手机号验证
+      const validatePhone = (rule, value, callback) => {
+        let _this = this
+        const reg = /^[1][3,4,5,7,8][0-9]{9}$/
+        if (reg.test(value)) {
+          _this.codedisabled = false
           callback()
         } else {
-          callback(new Error('密码必须由6-16个英文字母和数字的字符串组成'))
+          _this.codedisabled = true
+          callback(new Error('请输入正确的手机号'))
         }
       }
-      // <!--二次验证密码-->
+
+      // 注册二次验证密码
       let validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'))
@@ -335,137 +350,158 @@
           callback()
         }
       }
-      const validateVerifycode = (rule, value, callback) => {
+
+      // 重置二次验证密码
+      let validatePass4 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入验证码'))
-        } else if (value !== this.identifyCode) {
-          console.log('validateVerifycode:', value)
-          callback(new Error('验证码不正确!'))
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.restPassword.passwords2) {
+          callback(new Error('两次输入密码不一致!'))
         } else {
           callback()
         }
       }
+
       return {
-        codedisabled: false, //获取验证码按钮
-        getCodeBtn: '获取验证码',
-        codeModal: false, //图形码弹窗
-        codeImg: this.GLOBAL.BASE_URL + '/getCodeImage',
-        identifyCodes: '1234567890',
-        identifyCode: '',
         indexShow: true,
+        codedisabled: true, //获取验证码按钮
+        getCodeBtn: '获取验证码',
+        PhoneCodeModal: false, //获取手机验证码弹窗
+        codeImg: '', //验证码图片
+        imgCodeNum: '', //图形验证码数字
         active: 1,
         forgetType: 'second',
         activeName: 'first',
         typeShow: false,
         useType: true,
-        imgCode: '',
+        timer: null,
+        count: '',
+        show: true,
+        regdisabled: false,
+
         formReg: {
           PhoneNumber: '',
           name: '',
           passwords: '',
           confirmPassWord: '',
-          verification: '',
-          verification2: '',
-          mobileVerification: '',
-          RecommendCode: '',
+          verification: '', //图形码
+          verification2: '', //手机码
+          RecommendCode: '', //推荐码
           agreeService: true
         },
         formLogin: {
           PhoneNumber: '',
           passwords: '',
-          verification2: '',
+          verification: '',
           checked: true
         },
         forgetEmail: {
           email: '',
-          imgCode: ''
+          verification: ''
         },
         forgetPhone: {
-          phone: '',
-          imgsCode: '',
-          VerificationCode: ''
+          PhoneNumber: '',
+          verification: '',
+          verification2: ''
+        },
+        restPassword: {
+          passwords2: '',
+          confirmPassWord2: ''
         },
         rules: {
           PhoneNumber: [{
-              required: true,
-              message: '请输入手机号',
-              trigger: 'change'
-            },
-            {
-              validator: vali.validatePhone,
-              trigger: 'change'
-            }
-          ],
+            required: true,
+            trigger: 'change',
+            validator: validatePhone
+          }],
           name: [{
             required: true,
             message: '请输入昵称',
             trigger: 'change'
           }],
           passwords: [{
-              required: true,
-              message: '请输入密码',
-              trigger: 'change'
-            },
-            {
-              validator: validatePass,
-              trigger: 'change'
-            }
-          ],
+            required: true,
+            trigger: 'change',
+            message: '密码不能为空'
+          }, {
+            trigger: 'change',
+            pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,
+            message: '密码必须由6-16个英文字母和数字的字符串组成'
+          }],
           confirmPassWord: [{
-              required: true,
-              message: '请确认密码',
-              trigger: 'change'
-            },
-            {
-              validator: validatePass2,
-              trigger: 'change'
-            }
-          ],
+            required: true,
+            trigger: 'change',
+            validator: validatePass2,
+          }],
+          verification: [{
+            required: true,
+            trigger: 'blur',
+            message: '图形码不能为空'
+          }],
           verification2: [{
             required: true,
             trigger: 'blur',
-            validator: validateVerifycode
+            message: '手机验证码不能为空'
           }],
-          imgCode: [{
+          passwords2: [{
             required: true,
-            trigger: 'blur',
-            validator: validateVerifycode
+            trigger: 'change',
+            message: '密码不能为空'
+          }, {
+            trigger: 'change',
+            pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/,
+            message: '密码必须由6-16个英文字母和数字的字符串组成'
           }],
-          imgsCode: [{
+          confirmPassWord2: [{
             required: true,
-            trigger: 'blur',
-            validator: validateVerifycode
+            trigger: 'change',
+            validator: validatePass4,
           }],
-          mobileVerification: [{
-            required: true,
-            message: '请输入手机验证码',
-            trigger: 'change'
-          }]
-        },
-        timer: null,
-        count: '',
-        show: true
+        }
       }
     },
     created() {
+      this.getImgCode()
+    },
 
-    },
-    props: [],
-    mounted() {
-      //			let _this = this
-      //			_this.imgCode = _this.GLOBAL.BASE_URL + '/getCodeImage'
-    },
-    computed: {
-      //			onRoutes() {
-      //				return this.$route.path.replace('/', '')
-      //			}
-    },
     methods: {
-      //获取手机验证码
-      getPhoneCode() {
-        const TIME_COUNT = 60
+      //同不同意协议(不同意不能点击注册)
+      agree(){
         let _this = this
-        _this.codeModal = true
+        if(_this.formReg.agreeService){
+          _this.regdisabled = false
+        }else{
+          _this.regdisabled = true
+        }
+      },
+
+      //获取图片验证码
+      getImgCode() {
+        let _this = this
+        let param = {
+          SessionId: ''
+        }
+        _this.axios.post(this.GLOBAL.BASE_URL + '/api/imageCode', param).then((res) => {
+          if (res.data.status == '200') {
+            _this.codeImg = 'data:image/png;base64,' + res.data.data.imagedata
+            _this.imgCodeNum = res.data.data.imagecode
+            let sessionid = res.data.data.sessionid
+            sessionStorage.setItem('sessionid', sessionid)
+          }
+        })
+      },
+
+      //点击进入获取手机验证码弹框
+      PhoneCodeModalShow() {
+        let _this = this
+        _this.getImgCode()
+        _this.PhoneCodeModal = true
+      },
+
+      // 验证码倒计时
+      timeDJS() {
+        let _this = this
+        const TIME_COUNT = 60
         if (!_this.timer) {
           _this.count = TIME_COUNT;
           _this.show = false;
@@ -481,108 +517,236 @@
             }
           }, 1000)
         }
-        let param = {
-          phone: _this.formReg.PhoneNumber
-        }
-        _this.axios.post(_this.GLOBAL.BASE_URL + '/getPhoneVerification', param, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then((res) => {
-          console.log(res.data.success)
-          if (res.data.success == '200') {
-            _this.activeName = 'first'
-          }
+      },
 
-        }).catch((error) => {
-          console.log(error)
+      //注册获取手机验证码(注册时需要先验证图形验证码)
+      getPhoneCheckNum() {
+        let _this = this
+        if (_this.formReg.verification.toLowerCase() == _this.imgCodeNum.toLowerCase()) {
+          let param = {
+            SessionId: sessionStorage.getItem('sessionid'),
+            phonenumber: _this.formReg.PhoneNumber
+          }
+          _this.axios.post(this.GLOBAL.BASE_URL + '/api/phoneCode', param).then((res) => {
+            if (res.data.status == '200') {
+              _this.PhoneCodeModal = false
+              _this.$message({
+                message: res.data.message,
+                type: 'success'
+              })
+              // 验证码倒计时
+              _this.timeDJS()
+            } else {
+              _this.$message({
+                message: res.data.message,
+                type: 'error'
+              })
+              _this.getImgCode()
+            }
+          })
+        }
+      },
+
+      //找回密码获取手机验证码
+      getPhoneCheckNumRes() {
+        let _this = this
+        let param = {
+          SessionId: sessionStorage.getItem('sessionid'),
+          phonenumber: _this.forgetPhone.PhoneNumber
+        }
+        _this.axios.post(this.GLOBAL.BASE_URL + '/api/phoneCode', param).then((res) => {
+          if (res.data.status == '200') {
+            _this.PhoneCodeModal = false
+            _this.$message({
+              message: res.data.message,
+              type: 'success'
+            })
+            // 验证码倒计时
+            _this.timeDJS()
+          } else {
+            _this.$message({
+              message: res.data.message,
+              type: 'error'
+            })
+            _this.getImgCode()
+          }
         })
       },
-      // 切换验证码
-      refreshCode() {
+
+      //注册
+      submitRegister(formName) {
         let _this = this
-        _this.codeImg = this.GLOBAL.BASE_URL + '/getCodeImage?r=' + Math.random()
+        let param = {
+          sessionId: sessionStorage.getItem('sessionid'),
+          phonenumber: _this.formReg.PhoneNumber,
+          name: _this.formReg.name,
+          password: _this.formReg.passwords,
+          phonecode: _this.formReg.verification2,
+          RecommendCode: _this.formReg.RecommendCode
+        }
+        _this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.axios.post(_this.GLOBAL.BASE_URL + '/api/userRegister', param).then((res) => {
+              if (res.data.status == '200') {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'success'
+                })
+                _this.$router.push('/')
+              } else {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'error'
+                })
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
+          }
+        })
       },
+
+      // 登录
+      loginIn(formName) {
+        let _this = this
+        let param = {
+          SessionId: sessionStorage.getItem('sessionid'),
+          PhoneEmail: _this.formLogin.PhoneNumber,
+          Password: _this.formLogin.passwords,
+          imagecode: _this.formLogin.verification,
+        }
+        _this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.axios.post(_this.GLOBAL.BASE_URL + '/api/userLogin', param).then((res) => {
+              if (res.data.status == '200') {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'success'
+                })
+                sessionStorage.setItem('sessionid', res.data.sessionid)
+                _this.$router.push('/')
+              } else {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'error'
+                })
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
+          }
+        })
+      },
+
+      // 邮箱找回密码
+      getBackPasswordByEmail(formName) {
+
+      },
+
+      // 手机找回密码
+      getBackPasswordByPhone(formName) {
+        let _this = this
+        let param = {
+          SessionId: sessionStorage.getItem('sessionid'),
+          resetoption: 0,
+          PhoneNumber: _this.forgetPhone.PhoneNumber,
+          imagecode: _this.forgetPhone.verification,
+          validationcode: _this.forgetPhone.verification2
+        }
+        _this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.axios.post(_this.GLOBAL.BASE_URL + '/api/passRetrieve', param).then((res) => {
+              if (res.data.status == '200') {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'success'
+                })
+                sessionStorage.setItem('sessionid', res.data.sessionid)
+                _this.active = 3
+              } else {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'error'
+                })
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
+          }
+        })
+      },
+
+      // 确定重置密码
+      submitEditPassword(formName) {
+        let _this = this
+        let param = {
+          SessionId: sessionStorage.getItem('sessionid'),
+          PhoneNumber: _this.forgetPhone.PhoneNumber,
+          emial: _this.forgetEmail.email,
+          password: _this.restPassword.passwords2
+        }
+        _this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.axios.post(_this.GLOBAL.BASE_URL + '/api/doPassReset', param).then((res) => {
+              if (res.data.status == '200') {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'success'
+                })
+                sessionStorage.setItem('sessionid', res.data.sessionid)
+                _this.typeShow = false
+                _this.getImgCode()
+              } else {
+                _this.$message({
+                  message: res.data.message,
+                  type: 'error'
+                })
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
+          }
+        })
+      },
+
       //回首页
-      gotoHome(){
+      gotoHome() {
         let _this = this
         _this.indexShow = true
       },
-      //切换首页
-      checkIndex() {
-        let _this = this
-        _this.indexShow = true
-      },
-      //登录
+      //右上角登录
       loginBtn() {
         let _this = this
         _this.indexShow = false
         _this.activeName = 'first'
       },
-      //注册
+      //右上角注册框
       register() {
         let _this = this
         _this.indexShow = false
         _this.activeName = 'second'
       },
-      //登录
-      loginShow() {
-        let _this = this
-        _this.typeShow = true
-        console.log(12)
-      },
+
       //使用邮箱找回密码
       useEmail() {
         let _this = this
-        _this.useType = true
         _this.active = 1
+        _this.getImgCode()
       },
       //使用手机找回密码
       usePhone() {
         let _this = this
-        _this.useType = false
         _this.active = 2
+        _this.getImgCode()
       },
       //忘记密码
       forgetPwd() {
         let _this = this
         _this.typeShow = true
         _this.forgetType = 'second'
+        _this.active = 1
       },
-      // 登录
-      loginIn(formName) {
-        let _this = this
-        let token = '2324dsws'
-        sessionStorage.setItem('token', token)
-        _this.$router.push('/')
-      },
-      //注册
-      submitRegister() {
-        let _this = this
-        let param = {
-          phone: _this.formReg.PhoneNumber,
-          name: _this.formReg.name,
-          passwords: _this.formReg.passwords,
-          confirmPassWord: _this.formReg.confirmPassWord,
-          verification2: _this.formReg.verification2,
-          mobileVerification: _this.formReg.mobileVerification,
-          RecommendCode: _this.formReg.RecommendCode
-        }
-        this.axios.post(_this.GLOBAL.BASE_URL + '/userAdd', param, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then((res) => {
-          let data = res.data
-          console.log(data)
-          console.log(data.success)
-          if (res.data.success == '200') {
-            _this.activeName = 'first'
-          }
-        }).catch((error) => {
-          console.log(error)
-        })
-      },
+
       // 子组件选中的
       showMessageFromChild(data) {
         let _this = this
@@ -590,9 +754,7 @@
         _this.tabCheck = 'second'
       },
       handleClick(tab, event) {
-        console.log(tab, event)
-        console.log(tab.index)
-        this.refreshCode()
+        this.getImgCode()
       },
       //忘记密码tab切换
       forgetClick(tab, event) {

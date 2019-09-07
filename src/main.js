@@ -15,11 +15,11 @@ import vali from '@/components/common/validate'
 Vue.config.productionTip = false
 Vue.use(ElementUI,vali)
 axios.defaults.headers.post['Content-Type'] = 'application/json'
-axios.defaults.headers.common['token'] = sessionStorage.getItem('token')
+axios.defaults.headers.common['token'] = sessionStorage.getItem('sessionid')
 Vue.prototype.axios = axios
 Vue.prototype.GLOBAL = global_
 if (process.env.NODE_ENV === 'production') {
-  Vue.prototype.GLOBAL.BASE_URL = 'http://192.168.111.103' // 测试接口
+  Vue.prototype.GLOBAL.BASE_URL = 'http://119.23.78.0' // 测试接口
   // Vue.prototype.GLOBAL.BASE_URL = 'http://www.handyfitness.com.cn:8094' // 正式接口
 } else {
   // Vue.prototype.GLOBAL.BASE_URL = '开发测试地址'
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
 /* eslint-disable no-new */
 // 使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-  const role = sessionStorage.getItem('token')
+  const role = sessionStorage.getItem('sessionid')
   if (!role && to.path !== '/index') {
     next('/index')
   } else {

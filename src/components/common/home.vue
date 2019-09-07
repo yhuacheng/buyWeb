@@ -34,7 +34,7 @@
       </el-main>
     </el-container>
     <el-footer class="foot-box">
-      <div>©2019 AmoBuy 版权所有</div>
+      <div>©2019-2022 HotBuy 版权所有</div>
     </el-footer>
   </el-container>
 </template>

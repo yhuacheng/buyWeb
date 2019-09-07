@@ -5,7 +5,7 @@ import router from './router'
 
 // axios 配置
 axios.defaults.timeout = 5000
-axios.defaults.baseURL = 'http://192.168.111.103:52019'
+axios.defaults.baseURL = 'http://119.23.78.0'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.headers.common['Authentication-Token'] = store.state.token
 // http request 拦截器

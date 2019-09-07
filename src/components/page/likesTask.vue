@@ -2,9 +2,9 @@
   <div class="fbox">
     <div class="mb20">
       <span class="tabsTxt">
-        <span>首页</span>
-        <span class="fg">/</span>
         <span>产品</span>
+        <span class="fg">/</span>
+        <span>点赞任务</span>
       </span>
     </div>
 		<el-form :model="likesForm" ref="likesForm" class="demo-ruleForm">

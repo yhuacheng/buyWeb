@@ -2,87 +2,76 @@
   <div class="fbox">
     <div class="mb20">
       <span class="tabsTxt">
-        <span>首页</span>
-        <span class="fg">/</span>
         <span>产品</span>
+        <span class="fg">/</span>
+        <span>加购任务</span>
       </span>
     </div>
     <el-form :model="taskForm" ref="buyCarForm" class="demo-ruleForm" :rules="taskRule">
       <el-row>
-        <el-col :span="12" :xs="24">
+        <el-col :span="8" :xs="24">
           <el-form-item label="国家" class="disInline minWid" prop="CountryId">
             <el-select v-model="taskForm.CountryId" placeholder="请选择" class="disInline wid100">
               <el-option v-for="(item,index) in countryData" :key="index" :value="index" :label="item.country"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" :xs="24">
+        <el-col :span="8" :xs="24">
           <el-form-item label="产品ASIN" class="disInline minWid" prop="ProductByASIN">
             <el-input v-model="taskForm.ProductByASIN" maxlength="10" show-word-limit placeholder="长度为10的数字和字母组合"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-
-        <el-col :span="12" :xs="24">
+        <el-col :span="8" :xs="24">
           <el-form-item label="店铺名称" class="disInline minWid">
             <el-select v-model="taskForm.shopName" placeholder="请选择" class="disInline wid100">
 
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" :xs="24">
+        <el-col :span="8" :xs="24">
           <el-form-item label="产品名称" class="disInline minWid">
             <el-input v-model="taskForm.productName"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-
-        <el-col :span="12" :xs="24">
-          <el-form-item label="产品价格" class="disInline minWid" prop="productPrice">
+        <el-col :span="8" :xs="24">
+          <el-form-item label="产品价格(￥)" class="disInline minWid" prop="productPrice">
             <el-input type="text" v-model="taskForm.productPrice" placeholder="请输入数字">
-              <template slot="prepend">￥</template>
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" :xs="24">
-          <p class="lh40">产品评分</p>
-          <el-form-item>
-            <el-rate v-model="taskForm.productScore"></el-rate>
+        <el-col :span="8" :xs="24">
+          <el-form-item label="产品评分">
           </el-form-item>
+          <p style="position:relative;top:-12px"><el-rate v-model="taskForm.productScore"></el-rate></p>
         </el-col>
+        </el-row>
 
-      </el-row>
-      <div>
-        <el-col :span="12" :xs="24" class="fleft">
-          <el-form-item label="评论数" class="disInline minWid">
-            <el-input v-model="taskForm.comments" :disabled="true"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12" :xs="24" class="fright">
+      <el-row>
+        <el-col :span="8" :xs="24" class="fright">
           <el-form-item label="产品图片" class="disInline">
             <img alt="" :src="taskForm.productImg" class="proImg">
           </el-form-item>
         </el-col>
-        <el-col :span="12" :xs="24" class="fleft">
+        <el-col :span="8" :xs="24">
+          <el-form-item label="评论数" class="disInline minWid">
+            <el-input v-model="taskForm.comments" :disabled="true"></el-input>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="8" :xs="24">
           <el-form-item label="品类排名" class="disInline wid">
             <el-input type="text" v-model="taskForm.categoryRanking" :disabled="true"></el-input>
           </el-form-item>
         </el-col>
-      </div>
-      <el-row>
 
-        <el-col :span="12" :xs="24" class="fleft">
+        <el-col :span="8" :xs="24">
           <el-form-item label="产品链接" class="wid" prop="productLink">
             <el-input type="text" v-model="taskForm.productLink" placeholder="请以http://或https://开头"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
 
-      </el-row>
-      <el-form-item label="下单信息"></el-form-item>
+      <div class="mt30 mb20 t-title">下单信息</div>
       <el-row>
         <el-col :span="12" :xs="24">
           <el-form-item label="加购平台">

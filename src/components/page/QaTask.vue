@@ -2,9 +2,9 @@
   <div class="fbox">
     <div class="mb20">
       <span class="tabsTxt">
-        <span>首页</span>
-        <span class="fg">/</span>
         <span>产品</span>
+        <span class="fg">/</span>
+        <span>QA任务</span>
       </span>
     </div>
     <el-form :model="QaForm" class="demo-ruleForm">
@@ -23,34 +23,43 @@
       <div class="problem" v-show="QaType===true">
         <div class="con">
           <el-form :model="problemForm" ref="problemForm">
-            <el-row>
-              <el-col :span="7" class="mb20">
+            <el-row :gutter="20">
+              <el-col :span="4" :xs="6" class="mb20">
                 <span>国家</span>
               </el-col>
-              <el-col :span="7" :xs="10">
+              <el-col :span="6" :xs="7">
                 <span>产品ASIN</span>
               </el-col>
-              <el-col :span="10" :xs="7">
+              <el-col :span="8" :xs="6">
                 <span>问题</span>
+              </el-col>
+              <el-col :span="6" :xs="5">
+                <span>时间</span>
               </el-col>
             </el-row>
             <div v-for="(item,index) in problemForm.problemData" :key="index" class="mb20">
               <el-row :gutter="20">
-                <el-col :span="7" :xs="24" :sm="6">
+                <el-col :span="4" :xs="24">
                   <el-form-item :prop="`problemData[${index}].country`" :rules="[{required: true, message: '请选择国家', trigger: 'change'}]">
                     <el-select placeholder="请选择" v-model="item.country" class="wid100 mb20">
                       <el-option v-for="(item,index) in countryData" :key="index" :value="index" :label="item.country"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="7" :xs="24" :sm="6">
+                <el-col :span="6" :xs="24">
                   <el-form-item :prop="`problemData[${index}].proAnsi`" :rules="[{required: true, message: '产品ASIN不能为空', trigger: 'change'}]">
                     <el-input v-model="item.proAnsi" maxlength="10" show-word-limit placeholder="长度为10的数字和字母组合" class="disInline wid100 mb20"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10" :xs="24" :sm="12">
+                <el-col :span="8" :xs="24">
                   <el-form-item :prop="`problemData[${index}].problem`" :rules="[{required: true, message: '请输入问题', trigger: 'change'}]">
                     <el-input type="textarea" v-model="item.problem" class="disInline wid"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span='6' :xs="24">
+                  <el-form-item>
+                    <el-date-picker v-model="item.startTime" type="datetime" placeholder="选择日期" :picker-options="pickerOptions0">
+                    </el-date-picker>
                     <el-button type="danger" size="small" class="delMb mt10" @click="removeProblemTask(item, index)"
                       :disabled="disabled2">删除
                     </el-button>
@@ -66,7 +75,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="problemComfir('problemForm')">确定</el-button>
-              <el-button @click="QAtaskModel=false">返回</el-button>
+              <el-button @click="back">返回</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -75,19 +84,22 @@
         <div class="con">
           <el-form :model="answerForm" ref="answerForm" status-icon>
             <el-row :gutter="20">
-              <el-col :span="7" :xs="7" class="mb20">
+              <el-col :span="4" :xs="6" class="mb20">
                 <span>国家</span>
               </el-col>
-              <el-col :span="7" :xs="10">
-                <span>问题链接</span>
+              <el-col :span="6" :xs="7">
+                <span>产品ASIN</span>
               </el-col>
-              <el-col :span="10" :xs="7">
-                <span>回答</span>
+              <el-col :span="8" :xs="6">
+                <span>问题</span>
+              </el-col>
+              <el-col :span="6" :xs="5">
+                <span>时间</span>
               </el-col>
             </el-row>
             <div v-for="(item,index) in answerForm.answerData" :key="index" class="mb20">
               <el-row :gutter="20">
-                <el-col :span="7" :xs="24" :sm="6">
+                <el-col :span="4" :xs="24">
                   <el-form-item :prop="`answerData[${index}].country`" :rules="{required: true, message: '请选择国家', trigger: 'change'}">
                     <el-select placeholder="请选择" v-model="item.country" class="wid100">
                       <el-option label="美国" value="shanghai"></el-option>
@@ -95,16 +107,22 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="7" :xs="24" :sm="6">
-                  <el-form-item class="wid100" :prop="`answerData[${index}].address`" :rules="{required: true, message: '请输入问题链接', trigger: 'change'}">
+                <el-col :span="6" :xs="24">
+                  <el-form-item :prop="`answerData[${index}].address`" :rules="{required: true, message: '请输入问题链接', trigger: 'change'}">
                     <el-input v-model="item.address"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10" :xs="24" :sm="12">
+                <el-col :span="8" :xs="24">
                   <el-form-item :prop="`answerData[${index}].answer`" :rules="{required: true, message: '请输入回答', trigger: 'change'}">
                     <el-input type="textarea" v-model="item.answer" class="disInline wid"></el-input>
-                    <el-button type="danger" size="small" class="delMb mt10" @click="removeAnswerTask(item, index)"
-                      :disabled="disabled3">删除
+                  </el-form-item>
+                </el-col>
+                <el-col :span='6' :xs="24">
+                  <el-form-item>
+                    <el-date-picker v-model="item.startTime" type="datetime" placeholder="选择日期" :picker-options="pickerOptions0">
+                    </el-date-picker>
+                    <el-button type="danger" size="small" class="delMb mt10" @click="removeProblemTask(item, index)"
+                      :disabled="disabled2">删除
                     </el-button>
                   </el-form-item>
                 </el-col>
@@ -225,10 +243,18 @@
           recceiveAccount: '圭贤',
           PayAccount: '',
           tradingFlow: ''
-        }
+        },
+        pickerOptions0: this.startDate()
       }
     },
     methods: {
+      startDate() {
+        return {
+          disabledDate(time) {
+            return time.getTime() < Date.now() - 8.64e7
+          }
+        }
+      },
       // 选择QA任务类型
       selectQA() {
         let _this = this

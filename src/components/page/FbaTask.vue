@@ -2,82 +2,80 @@
   <div class="fbox">
     <div class="mb20">
       <span class="tabsTxt">
-        <span>首页</span>
-        <span class="fg">/</span>
         <span>产品</span>
+        <span class="fg">/</span>
+        <span>FBA任务</span>
       </span>
     </div>
     <el-row>
     <el-col :span="16" :xs="24" :sm="24" :md="24" :lg="16">
       <el-form :model="taskForm" ref="taskForm" :rules="taskRule" class="demo-ruleForm" status-icon>
         <el-row>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="国家" class="disInline minWid" prop="CountryId">
               <el-select v-model="taskForm.CountryId" placeholder="请选择" class="disInline wid100">
                 <el-option v-for="(item,index) in countryData" :key="index" :value="index" :label="item.country"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="产品ASIN" class="disInline minWid" prop="ProductByASIN">
               <el-input v-model="taskForm.ProductByASIN" maxlength="10" show-word-limit placeholder="长度为10的数字和字母组合"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="店铺名称" class="disInline minWid">
               <el-select v-model="taskForm.shopName" placeholder="请选择" class="disInline wid100">
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="产品名称" class="disInline minWid">
               <el-input v-model="taskForm.productName"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12" :xs="24">
-            <el-form-item label="产品价格" class="disInline minWid" prop="productPrice">
+          <el-col :span="8" :xs="24">
+            <el-form-item label="产品价格(￥)" class="disInline minWid" prop="productPrice">
               <el-input type="text" v-model="taskForm.productPrice" placeholder="请输入数字">
-                <template slot="prepend">￥</template>
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12" :xs="24">
-            <p class="lh40">产品评分</p>
-            <el-form-item>
-              <el-rate v-model="taskForm.productScore"></el-rate>
+          <el-col :span="8" :xs="24">
+            <el-form-item label="产品评分">
             </el-form-item>
+            <p style="position:relative;top:-12px"><el-rate v-model="taskForm.productScore"></el-rate></p>
           </el-col>
-        </el-row>
-        <div>
-          <el-col :span="12" :xs="24" class="fleft">
-            <el-form-item label="评论数" class="disInline minWid">
-              <el-input type="number" v-model="taskForm.comments" :disabled="true"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12" :xs="24" class="fright">
+          </el-row>
+
+          <el-row>
+          <el-col :span="8" :xs="24">
             <el-form-item label="产品图片" class="disInline">
               <img :src="taskForm.productImg" alt="" class="proImg">
             </el-form-item>
           </el-col>
-          <el-col :span="12" :xs="24" class="fleft">
-            <el-form-item label="品类排名" class="wid">
+          <el-col :span="8" :xs="24">
+            <el-form-item label="评论数" class="disInline minWid">
+              <el-input type="number" v-model="taskForm.comments" :disabled="true"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8" :xs="24">
+            <el-form-item label="品类排名" class="disInline minWid">
               <el-input type="text" v-model="taskForm.categoryRanking" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
-        </div>
-        <el-row>
-          <el-col :span="12" :xs="24" class="fleft">
-            <el-form-item label="产品链接" class="wid" prop="productLink">
+          <el-col :span="13" :xs="24">
+            <el-form-item label="产品链接" class="Wid" prop="productLink">
               <el-input type="text" v-model="taskForm.productLink" placeholder="请以http://或者https://开头"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8" :xs="24">
+            <el-form-item label="预估月销量" class="disInline minWid">
+              <el-input type="text" v-model="taskForm.ygsalesnum"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <div class="mt30 mb20">下单信息</div>
+          <div class="mt30 mb20 t-title">下单信息</div>
         </el-row>
         <el-row>
           <el-col :span="12" :xs="24">
@@ -96,21 +94,17 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="搜索关键词" class="disInline minWid" prop="searchKeyword">
               <el-input v-model="taskForm.searchKeyword"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="代购数量" class="disInline minWid" prop="buyNum">
               <el-input v-model="taskForm.buyNum" @blur="checkBuyNum" placeholder="请输入正整数"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="留评类型" class="disInline minWid" prop="commentType">
               <el-select v-model="taskForm.commentType" class="disInline wid100" placeholder="请选择" @change="lpType">
                 <el-option label="不留评" value="不留评"></el-option>
@@ -121,22 +115,20 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24">
             <el-form-item label="Feedback数量" class="disInline minWid">
               <el-input type="text" required="false" v-model="taskForm.fbNumber" placeholder="请输入正整数"></el-input>
               <p><span class="tipRed" v-if="parseInt(this.taskForm.fbNumber)>parseInt(this.taskForm.buyNum) || parseInt(this.taskForm.fbNumber)<0">数量必须小于等于订购数量{{taskForm.buyNum}}</span></p>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row v-show="nolp==true">
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24" v-show="nolp==true">
             <el-form-item label="评论图片数量" class="disInline minWid">
               <el-input v-model="taskForm.commentImgNum" placeholder="请输入正整数"></el-input>
               <div class="el-form-item__error" v-if="parseInt(this.taskForm.commentImgNum) > parseInt(this.taskForm.buyNum) || parseInt(this.taskForm.commentImgNum)>5">
                 数量不能超过订购数量并且最大为5</div>
             </el-form-item>
           </el-col>
-          <el-col :span="12" :xs="24">
+          <el-col :span="8" :xs="24" v-show="nolp==true">
             <el-form-item label="评论视频数量" class="disInline minWid">
               <el-input type="text" :required="false" v-model="taskForm.commentVedioNum" placeholder="请输入正整数"></el-input>
               <div class="el-form-item__error" v-if="parseInt(this.taskForm.commentVedioNum) > parseInt(this.taskForm.buyNum) || parseInt(this.taskForm.commentVedioNum)>5">
@@ -145,8 +137,16 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24" :xs="24">
+          <el-col :span="12" :xs="24">
             <el-form-item label="是否使用优惠券">
+              <el-radio-group v-model="taskForm.coupon">
+                <el-radio label="否"></el-radio>
+                <el-radio label="是"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :xs="24">
+            <el-form-item label="是否自发货">
               <el-radio-group v-model="taskForm.coupon">
                 <el-radio label="否"></el-radio>
                 <el-radio label="是"></el-radio>
@@ -313,8 +313,8 @@
         btnTask: true,
         errorMes: false,
         nolp: true,
-        serviceTab: false, // 服务费显示隐藏
-        addFreeTab: false, // 服务费显示隐藏
+        serviceTab: true, // 服务费显示隐藏
+        addFreeTab: true, // 服务费显示隐藏
         rateTab: true, // 服务费显示隐藏
         pickerOptions0: this.startDate(),
         rateData: [], // 费率
@@ -365,7 +365,8 @@
           serviceCharge: '0.00',
           total: '0.00',
           links: '',
-          remark: ''
+          remark: '',
+          ygsalesnum: ''
         },
         taskRule: {
           ProductByASIN: [{
@@ -839,6 +840,13 @@
   }
 </script>
 
-<style>
-
+<style scope>
+.fl,.zengTit,.serviceTit{
+  background: #eee;
+  color: #212121;
+  cursor: pointer;
+}
+.t-title{
+  font-size: 18px;
+}
 </style>

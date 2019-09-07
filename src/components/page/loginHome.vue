@@ -66,10 +66,7 @@
               <el-button size="small" type="primary" v-show="scope.row.name=='亚马逊加购任务'" @click="buyCarTask">购买</el-button>
               <el-button size="small" type="warning" v-show="scope.row.name=='亚马逊心愿任务'" @click="wishTask">购买</el-button>
               <el-button size="small" type="success" v-show="scope.row.name=='亚马逊点赞任务'" @click="likesTask">购买</el-button>
-              <el-button size="small" type="primary" v-show="scope.row.name=='速卖通FBA任务'" @click="fbaTask">购买</el-button>
-              <el-button size="small" type="warning" v-show="scope.row.name=='速卖通加购任务'" @click="buyCarTask">购买</el-button>
-              <el-button size="small" type="success" v-show="scope.row.name=='速卖通心愿任务'" @click="wishTask">购买</el-button>
-              <el-button size="small" type="primary" v-show="scope.row.name=='速卖通点赞任务'" @click="likesTask">购买</el-button>
+              <el-button size="small" type="primary" v-show="scope.row.name=='亚马逊QA任务'" @click="QaTask">购买</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -85,14 +82,11 @@
           <el-table-column prop="remark" label="简介" align="center" width="400"></el-table-column>
           <el-table-column prop="" label="购买" align="center">
             <template slot-scope="scope">
-              <el-button size="small" type="success" v-show="scope.row.name=='亚马逊FBA任务'" @click="fbaTask" style="margin-left: 8px;">购买</el-button>
-              <el-button size="small" type="primary" v-show="scope.row.name=='亚马逊加购任务'" @click="buyCarTask">购买</el-button>
-              <el-button size="small" type="warning" v-show="scope.row.name=='亚马逊心愿任务'" @click="wishTask">购买</el-button>
-              <el-button size="small" type="success" v-show="scope.row.name=='亚马逊点赞任务'" @click="likesTask">购买</el-button>
-              <el-button size="small" type="primary" v-show="scope.row.name=='速卖通FBA任务'" @click="fbaTask">购买</el-button>
-              <el-button size="small" type="warning" v-show="scope.row.name=='速卖通加购任务'" @click="buyCarTask">购买</el-button>
-              <el-button size="small" type="success" v-show="scope.row.name=='速卖通心愿任务'" @click="wishTask">购买</el-button>
-              <el-button size="small" type="primary" v-show="scope.row.name=='速卖通点赞任务'" @click="likesTask">购买</el-button>
+              <el-button size="small" type="success" v-show="scope.row.name=='速卖通FBA任务'" @click="fbaTask" style="margin-left: 8px;">购买</el-button>
+              <el-button size="small" type="primary" v-show="scope.row.name=='速卖通加购任务'" @click="buyCarTask">购买</el-button>
+              <el-button size="small" type="warning" v-show="scope.row.name=='速卖通心愿任务'" @click="wishTask">购买</el-button>
+              <el-button size="small" type="success" v-show="scope.row.name=='速卖通点赞任务'" @click="likesTask">购买</el-button>
+              <el-button size="small" type="primary" v-show="scope.row.name=='速卖通QA任务'" @click="QaTask">购买</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -187,31 +181,6 @@
             }
           ]
         },
-        taskList: [{
-            icon: 'el-icon-magic-stick fz120 icon1',
-            taskName: '亚马逊FBA任务',
-            price: '100',
-            des: '信誉不错的士大夫撒'
-          },
-          {
-            icon: 'el-icon-magic-stick fz120 icon1',
-            taskName: '亚马逊加购任务',
-            price: '100',
-            des: '信誉不错的士大夫撒'
-          },
-          {
-            icon: 'el-icon-magic-stick fz120 icon1',
-            taskName: '亚马逊心愿任务',
-            price: '100',
-            des: '信誉不错的士大夫撒'
-          },
-          {
-            icon: 'el-icon-magic-stick fz120 icon1',
-            taskName: '亚马逊点赞任务',
-            price: '100',
-            des: '信誉不错的士大夫撒'
-          },
-        ],
         tableData1: [{
           name: '亚马逊FBA任务',
           price: '100起',
@@ -226,6 +195,10 @@
           remark: '亚马逊FBA订单亚马逊FBA订单亚马逊亚马逊亚马逊'
         }, {
           name: '亚马逊点赞任务',
+          price: '100起',
+          remark: '亚马逊FBA订单亚马逊FBA订单亚马逊亚马逊亚马逊'
+        }, {
+          name: '亚马逊QA任务',
           price: '100起',
           remark: '亚马逊FBA订单亚马逊FBA订单亚马逊亚马逊亚马逊'
         }],
@@ -243,6 +216,10 @@
           remark: '亚马逊FBA订单亚马逊FBA订单亚马逊亚马逊亚马逊'
         }, {
           name: '速卖通点赞任务',
+          price: '100起',
+          remark: '亚马逊FBA订单亚马逊FBA订单亚马逊亚马逊亚马逊'
+        }, {
+          name: '速卖通QA任务',
           price: '100起',
           remark: '亚马逊FBA订单亚马逊FBA订单亚马逊亚马逊亚马逊'
         }]
@@ -317,6 +294,11 @@
       likesTask() {
         let _this = this
         _this.$router.push('/likesTask')
+      },
+      //QA任务
+      QaTask() {
+        let _this = this
+        _this.$router.push('/QaTask')
       },
       // 提现
       cashMoney() {
