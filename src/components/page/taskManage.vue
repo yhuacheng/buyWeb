@@ -396,7 +396,7 @@
       }
     },
     created() {
-      this.getAllData()
+      // this.getAllData()
       this.getError()
       let status = this.status
       if (status) {

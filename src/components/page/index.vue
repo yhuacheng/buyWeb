@@ -155,7 +155,7 @@
 
     <!-- 网站首页 -->
     <div class="index" v-show='indexShow'>
-      <a name='index'></a>
+      <a id="index"></a>
       <div class="banner">
         <div class="headNav">
           <div class="navHeads">
@@ -167,9 +167,9 @@
             </div>
             <div class="navRightBox loginRi">
               <ul class="navBox">
-                <li><a href="#index">首页</a></li>
-                <li><a href="#Solution">产品服务</a></li>
-                <li><a href="#about">关于我们</a></li>
+                <li><a @click="toTag('#index')">首页</a></li>
+                <li><a @click="toTag('#solution')">产品服务</a></li>
+                <li><a @click="toTag('#about')">关于我们</a></li>
                 <li>
                   <a class="loginBtn" @click="loginBtn">登录</a><span class="col-fff">|</span>
                   <a class="registerBtn" @click="register">注册</a>
@@ -184,7 +184,7 @@
         </div>
       </div>
       <!-- 我们的产品服务 -->
-      <a name='Solution'></a>
+      <a id="solution"></a>
       <div class="taskShow">
         <div class="widCon">
           <p class="fz30 center">我们提供专业的产品服务</p>
@@ -196,7 +196,7 @@
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
-                  <p class="mt30 col9 taskDes">特别好的产品，用过的都说好，回头客特别多</p>
+                  <p class="mt30 col9 taskDes">真实IP地址，真实购物，真实发货，真实收货，绝对安全。真实IP地址，真实购物，真实发货，真实收货，绝对安全。</p>
                   <div class="buyBtn">
                     <el-button type='danger' round @click="loginBtn">立即购买</el-button>
                   </div>
@@ -209,7 +209,7 @@
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
-                  <p class="mt30 col9 taskDes">特别好的产品，用过的都说好，回头客特别多</p>
+                  <p class="mt30 col9 taskDes">真实IP地址，真实购物，真实发货，真实收货，绝对安全。真实IP地址，真实购物，真实发货，真实收货，绝对安全。</p>
                   <div class="buyBtn">
                     <el-button type='danger' round @click="loginBtn">立即购买</el-button>
                   </div>
@@ -222,7 +222,7 @@
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
-                  <p class="mt30 col9 taskDes">特别好的产品，用过的都说好，回头客特别多</p>
+                  <p class="mt30 col9 taskDes">真实IP地址，真实购物，真实发货，真实收货，绝对安全。真实IP地址，真实购物，真实发货，真实收货，绝对安全。</p>
                   <div class="buyBtn">
                     <el-button type='danger' round @click="loginBtn">立即购买</el-button>
                   </div>
@@ -235,7 +235,7 @@
                 <p class="mt20 mb20"><span class="priceTask">￥100</span><span class="colItem">起</span></p>
                 <p class="br"></p>
                 <div class="itemBom">
-                  <p class="mt30 col9 taskDes">特别好的产品，用过的都说好，回头客特别多</p>
+                  <p class="mt30 col9 taskDes">真实IP地址，真实购物，真实发货，真实收货，绝对安全。真实IP地址，真实购物，真实发货，真实收货，绝对安全。</p>
                   <div class="buyBtn">
                     <el-button type='danger' round @click="loginBtn">立即购买</el-button>
                   </div>
@@ -298,7 +298,7 @@
         </el-row>
       </div>
       <!--关于我们-->
-      <a name='about'></a>
+      <a id="about"></a>
       <div class="aboutUs">
         <div class="aboutCon">
           <p class="txtCenter fz30 aboutTit">关于我们</p>
@@ -316,7 +316,7 @@
           <p class="fz20 col-fff mb20">加入我们 &nbsp; 携手未来 &nbsp; 合作共赢</p>
           <el-button type='warning' class='contactBtn' @click="register">立即加入</el-button>
         </div>
-        <p class="txtCenter footerTxt">Copyright ©2019 By Amzbuy 版权所有</p>
+        <p class="txtCenter footerTxt">Copyright ©2019 By HotBuy 版权所有</p>
       </footer>
     </div>
   </div>
@@ -461,7 +461,7 @@
       }
     },
     created() {
-      this.getImgCode()
+      // this.getImgCode()
     },
 
     methods: {
@@ -609,33 +609,35 @@
       // 登录
       loginIn(formName) {
         let _this = this
-        let param = {
-          SessionId: sessionStorage.getItem('sessionid'),
-          PhoneEmail: _this.formLogin.PhoneNumber,
-          Password: _this.formLogin.passwords,
-          imagecode: _this.formLogin.verification,
-        }
-        _this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.axios.post(_this.GLOBAL.BASE_URL + '/api/userLogin', param).then((res) => {
-              if (res.data.status == '200') {
-                _this.$message({
-                  message: res.data.message,
-                  type: 'success'
-                })
-                sessionStorage.setItem('sessionid', res.data.sessionid)
-                _this.$router.push('/')
-              } else {
-                _this.$message({
-                  message: res.data.message,
-                  type: 'error'
-                })
-              }
-            }).catch((error) => {
-              console.log(error)
-            })
-          }
-        })
+        sessionStorage.setItem('sessionid', '123')
+        _this.$router.push('/')
+        // let param = {
+        //   SessionId: sessionStorage.getItem('sessionid'),
+        //   PhoneEmail: _this.formLogin.PhoneNumber,
+        //   Password: _this.formLogin.passwords,
+        //   imagecode: _this.formLogin.verification,
+        // }
+        // _this.$refs[formName].validate((valid) => {
+        //   if (valid) {
+        //     this.axios.post(_this.GLOBAL.BASE_URL + '/api/userLogin', param).then((res) => {
+        //       if (res.data.status == '200') {
+        //         _this.$message({
+        //           message: res.data.message,
+        //           type: 'success'
+        //         })
+        //         sessionStorage.setItem('sessionid', res.data.sessionid)
+        //         _this.$router.push('/')
+        //       } else {
+        //         _this.$message({
+        //           message: res.data.message,
+        //           type: 'error'
+        //         })
+        //       }
+        //     }).catch((error) => {
+        //       console.log(error)
+        //     })
+        //   }
+        // })
       },
 
       // 邮箱找回密码
@@ -765,6 +767,11 @@
         } else {
           _this.typeShow = true
         }
+      },
+
+      //首页顶部菜单栏点击时页面定位到指定位置
+      toTag(id) {
+        document.querySelector(id).scrollIntoView(true)
       }
     }
   }

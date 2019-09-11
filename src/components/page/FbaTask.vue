@@ -840,13 +840,6 @@
   }
 </script>
 
-<style scope>
-.fl,.zengTit,.serviceTit{
-  background: #eee;
-  color: #212121;
-  cursor: pointer;
-}
-.t-title{
-  font-size: 18px;
-}
+<style>
+
 </style>

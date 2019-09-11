@@ -1419,3 +1419,13 @@ footer {
   background: #f5f5f5;
   padding: 15px;
 }
+
+/* FBA任务购买页面 */
+.tabTitle{
+  background: #eee;
+  color: #212121;
+  cursor: pointer;
+}
+.t-title{
+  font-size: 18px;
+}
