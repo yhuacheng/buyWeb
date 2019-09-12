@@ -8,9 +8,7 @@
             <li><img class="userimg" src="../../assets/image/headImg.jpg"></li>
             <li class="username">
             <el-dropdown>
-                <span class="el-dropdown-link">
-                  刘德华<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
+                <div class="el-dropdown-link">刘德华<i class="el-icon-arrow-down el-icon--right"></i></div>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item @click.native="gotoInfo">基本信息</el-dropdown-item>
                   <el-dropdown-item @click.native="gotoPwd">修改密码</el-dropdown-item>
